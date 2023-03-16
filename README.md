@@ -56,13 +56,13 @@ enum Enum
     c = 7
 };
 
-// Will return type info along enum values in this order {{"A", -3}, {"C", 7}, {"B", 8}}.
+// You can use `type_of<T>();` directly without using `TYPE_OF_ENUM(T, ...)` macro, but it will return type info along enum values in this order {{"A", -3}, {"C", 7}, {"B", 8}}, and will be limited to the range between `REFLECT_MIN_ENUM_VALUE` to `REFLECT_MAX_ENUM_VALUE`.
 auto enum_type = type_of<Enum>();
 
 // However, if `TYPE_OF_ENUM` macro is used, the correct order of definition will be returned.
 // {{"A", -3}, {"B", 8}, {"C", 7}}
 // And it can work on any enum range.
-TYPE_OF_ENUM(Enu, A, B, C)
+TYPE_OF_ENUM(Enum, A, B, C)
 ------------------------------------------------------------------------------
 auto t = type_of<T>();
 auto t = type_of(T{});
