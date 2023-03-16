@@ -25,6 +25,12 @@ jobs:
         with:
           submodules: 'true'
 
+      - name: Installing GCC
+        if: matrix.os == 'ubuntu-latest'
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          version: 12
+
       - name: Configuring
         run: cmake -B build -DCMAKE_BUILD_TYPE=${{matrix.build-variant}}
 
