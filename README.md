@@ -46,6 +46,7 @@ struct Serializable
     void *e;
 };
 
+// You can annotate fields with custom annotations that will be stored statically with the type info.
 TYPE_OF(Serializable, a, b, c, d, (e, "NoSerialize"))
 ------------------------------------------------------------------------------
 enum Enum
