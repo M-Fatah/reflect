@@ -104,7 +104,7 @@ print(Value v)
 			uptr *pointer = *(uptr **)(v.data);
 			if (v.type == type_of<const char *>() || v.type == type_of<char *>())
 			{
-				printf("%s", (const char *)pointer);
+				printf("\"%s\"", (const char *)pointer);
 			}
 			else
 			{

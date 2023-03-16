@@ -24,4 +24,4 @@ set(LIBS
 
 add_executable(unittest ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(unittest ${LIBS})
-target_compile_options(unittest PRIVATE ${GLOBAL_COMPILE_OPTIONS})
+target_compile_options(unittest PRIVATE ${REFLECT_COMPILE_OPTIONS})

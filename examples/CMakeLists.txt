@@ -10,4 +10,4 @@ set(LIBS
 
 add_executable(print ${HEADER_FILES} ${SOURCE_FILES})
 target_link_libraries(print PUBLIC ${LIBS})
-target_compile_options(print PRIVATE ${GLOBAL_COMPILE_OPTIONS})
+target_compile_options(print PRIVATE ${REFLECT_COMPILE_OPTIONS})
