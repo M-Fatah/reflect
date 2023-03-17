@@ -4,74 +4,74 @@
 #include <inttypes.h>
 
 inline static void
-print(Value v)
+print(reflect::Value v)
 {
 	if (v.data == nullptr)
 		return;
 
 	switch (v.type->kind)
 	{
-		case TYPE_KIND_I8:
+		case reflect::TYPE_KIND_I8:
 		{
 			printf("%" PRIi8, *(i8 *)v.data);
 			break;
 		}
-		case TYPE_KIND_I16:
+		case reflect::TYPE_KIND_I16:
 		{
 			printf("%" PRIi16, *(i16 *)v.data);
 			break;
 		}
-		case TYPE_KIND_I32:
+		case reflect::TYPE_KIND_I32:
 		{
 			printf("%" PRIi32, *(i32 *)v.data);
 			break;
 		}
-		case TYPE_KIND_I64:
+		case reflect::TYPE_KIND_I64:
 		{
 			printf("%" PRIi64, *(i64 *)v.data);
 			break;
 		}
-		case TYPE_KIND_U8:
+		case reflect::TYPE_KIND_U8:
 		{
 			printf("%" PRIu8, *(u8 *)v.data);
 			break;
 		}
-		case TYPE_KIND_U16:
+		case reflect::TYPE_KIND_U16:
 		{
 			printf("%" PRIu16, *(u16 *)v.data);
 			break;
 		}
-		case TYPE_KIND_U32:
+		case reflect::TYPE_KIND_U32:
 		{
 			printf("%" PRIu32, *(u32 *)v.data);
 			break;
 		}
-		case TYPE_KIND_U64:
+		case reflect::TYPE_KIND_U64:
 		{
 			printf("%" PRIu64, *(u64 *)v.data);
 			break;
 		}
-		case TYPE_KIND_F32:
+		case reflect::TYPE_KIND_F32:
 		{
 			printf("%g", *(f32 *)v.data);
 			break;
 		}
-		case TYPE_KIND_F64:
+		case reflect::TYPE_KIND_F64:
 		{
 			printf("%g", *(f64 *)v.data);
 			break;
 		}
-		case TYPE_KIND_BOOL:
+		case reflect::TYPE_KIND_BOOL:
 		{
 			printf("%s", *(bool *)v.data ? "true": "false");
 			break;
 		}
-		case TYPE_KIND_CHAR:
+		case reflect::TYPE_KIND_CHAR:
 		{
 			printf("'%c'", *(char *)v.data);
 			break;
 		}
-		case TYPE_KIND_STRUCT:
+		case reflect::TYPE_KIND_STRUCT:
 		{
 			printf("%s { ", v.type->name);
 			for (u64 i = 0; i < v.type->as_struct.field_count; ++i)
@@ -85,7 +85,7 @@ print(Value v)
 			printf(" }");
 			break;
 		}
-		case TYPE_KIND_ARRAY:
+		case reflect::TYPE_KIND_ARRAY:
 		{
 			printf("[ ");
 			for (u64 i = 0; i < v.type->as_array.element_count; ++i)
@@ -98,7 +98,7 @@ print(Value v)
 			printf(" ]");
 			break;
 		}
-		case TYPE_KIND_POINTER:
+		case reflect::TYPE_KIND_POINTER:
 		{
 			const auto *pointee = v.type->as_pointer.pointee;
 			uptr *pointer = *(uptr **)(v.data);
@@ -113,7 +113,7 @@ print(Value v)
 			}
 			break;
 		}
-		case TYPE_KIND_ENUM:
+		case reflect::TYPE_KIND_ENUM:
 		{
 			for (u64 i = 0; i < v.type->as_enum.value_count; ++i)
 				if (const auto & value = v.type->as_enum.values[i]; value.index == *(i32 *)(v.data))
@@ -166,7 +166,7 @@ main(i32, char **)
 	Foo f1 = {'A', true, {"Hello", "World"}, &d, {1.5f}, nullptr};
 	Foo f2 = {'B', false, {"FOO", "BOO"}, &dd, {7.5f}, &f1};
 
-	print(value_of(f2));
+	print(reflect::value_of(f2));
 
 	return 0;
 }
