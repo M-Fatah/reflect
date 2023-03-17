@@ -112,43 +112,43 @@ TYPE_OF((Bar<T, R, E>), x, y, z)
 
 TEST_CASE("[CORE]: Reflect")
 {
-	SUBCASE("name_of<T> primitives")
+	SUBCASE("reflect::name_of<T> primitives")
 	{
-		auto i08_name = name_of<i8>();
-		auto i16_name = name_of<i16>();
-		auto i32_name = name_of<i32>();
-		auto i64_name = name_of<i64>();
+		auto i08_name = reflect::name_of<i8>();
+		auto i16_name = reflect::name_of<i16>();
+		auto i32_name = reflect::name_of<i32>();
+		auto i64_name = reflect::name_of<i64>();
 
-		auto u08_name = name_of<u8>();
-		auto u16_name = name_of<u16>();
-		auto u32_name = name_of<u32>();
-		auto u64_name = name_of<u64>();
+		auto u08_name = reflect::name_of<u8>();
+		auto u16_name = reflect::name_of<u16>();
+		auto u32_name = reflect::name_of<u32>();
+		auto u64_name = reflect::name_of<u64>();
 
-		auto f32_name = name_of<f32>();
-		auto f64_name = name_of<f64>();
+		auto f32_name = reflect::name_of<f32>();
+		auto f64_name = reflect::name_of<f64>();
 
-		auto bool_name = name_of<bool>();
-		auto char_name = name_of<char>();
+		auto bool_name = reflect::name_of<bool>();
+		auto char_name = reflect::name_of<char>();
 
-		auto void_name = name_of<void>();
+		auto void_name = reflect::name_of<void>();
 
-		auto const_i08_name = name_of<const i8>();
-		auto const_i16_name = name_of<const i16>();
-		auto const_i32_name = name_of<const i32>();
-		auto const_i64_name = name_of<const i64>();
+		auto const_i08_name = reflect::name_of<const i8>();
+		auto const_i16_name = reflect::name_of<const i16>();
+		auto const_i32_name = reflect::name_of<const i32>();
+		auto const_i64_name = reflect::name_of<const i64>();
 
-		auto const_u08_name = name_of<const u8>();
-		auto const_u16_name = name_of<const u16>();
-		auto const_u32_name = name_of<const u32>();
-		auto const_u64_name = name_of<const u64>();
+		auto const_u08_name = reflect::name_of<const u8>();
+		auto const_u16_name = reflect::name_of<const u16>();
+		auto const_u32_name = reflect::name_of<const u32>();
+		auto const_u64_name = reflect::name_of<const u64>();
 
-		auto const_f32_name = name_of<const f32>();
-		auto const_f64_name = name_of<const f64>();
+		auto const_f32_name = reflect::name_of<const f32>();
+		auto const_f64_name = reflect::name_of<const f64>();
 
-		auto const_bool_name = name_of<const bool>();
-		auto const_char_name = name_of<const char>();
+		auto const_bool_name = reflect::name_of<const bool>();
+		auto const_char_name = reflect::name_of<const char>();
 
-		auto const_void_name = name_of<const void>();
+		auto const_void_name = reflect::name_of<const void>();
 
 		CHECK(::strcmp(i08_name, "i8") == 0);
 		CHECK(::strcmp(i16_name, "i16") == 0);
@@ -187,58 +187,58 @@ TEST_CASE("[CORE]: Reflect")
 		CHECK(::strcmp(const_void_name, "const void") == 0);
 	}
 
-	SUBCASE("name_of<T> pointer")
+	SUBCASE("reflect::name_of<T> pointer")
 	{
-		auto vec3_ptr_name = name_of<Vector3 *>();
+		auto vec3_ptr_name = reflect::name_of<Vector3 *>();
 		CHECK(::strcmp(vec3_ptr_name, "Vector3*") == 0);
 
-		auto const_vec3_ptr_name = name_of<const Vector3 *>();
+		auto const_vec3_ptr_name = reflect::name_of<const Vector3 *>();
 		CHECK(::strcmp(const_vec3_ptr_name, "const Vector3*") == 0);
 
-		auto const_point_const_i32_ptr_name = name_of<const Point<const i32 *>>();
+		auto const_point_const_i32_ptr_name = reflect::name_of<const Point<const i32 *>>();
 		CHECK(::strcmp(const_point_const_i32_ptr_name, "const Point<const i32*>") == 0);
 	}
 
-	SUBCASE("name_of<T> struct")
+	SUBCASE("reflect::name_of<T> struct")
 	{
-		auto vec3_name = name_of<Vector3>();
+		auto vec3_name = reflect::name_of<Vector3>();
 		CHECK(::strcmp(vec3_name, "Vector3") == 0);
 
-		auto const_vec3_name = name_of<const Vector3>();
+		auto const_vec3_name = reflect::name_of<const Vector3>();
 		CHECK(::strcmp(const_vec3_name, "const Vector3") == 0);
 	}
 
-	SUBCASE("name_of<T> template struct")
+	SUBCASE("reflect::name_of<T> template struct")
 	{
-		auto point_i08_name = name_of<Point<i8>>();
-		auto point_i16_name = name_of<Point<i16>>();
-		auto point_i32_name = name_of<Point<i32>>();
-		auto point_i64_name = name_of<Point<i64>>();
+		auto point_i08_name = reflect::name_of<Point<i8>>();
+		auto point_i16_name = reflect::name_of<Point<i16>>();
+		auto point_i32_name = reflect::name_of<Point<i32>>();
+		auto point_i64_name = reflect::name_of<Point<i64>>();
 
-		auto point_u08_name = name_of<Point<u8>>();
-		auto point_u16_name = name_of<Point<u16>>();
-		auto point_u32_name = name_of<Point<u32>>();
-		auto point_u64_name = name_of<Point<u64>>();
+		auto point_u08_name = reflect::name_of<Point<u8>>();
+		auto point_u16_name = reflect::name_of<Point<u16>>();
+		auto point_u32_name = reflect::name_of<Point<u32>>();
+		auto point_u64_name = reflect::name_of<Point<u64>>();
 
-		auto point_f32_name = name_of<Point<f32>>();
-		auto point_f64_name = name_of<Point<f64>>();
+		auto point_f32_name = reflect::name_of<Point<f32>>();
+		auto point_f64_name = reflect::name_of<Point<f64>>();
 
-		auto point_bool_name = name_of<Point<bool>>();
-		auto point_char_name = name_of<Point<char>>();
+		auto point_bool_name = reflect::name_of<Point<bool>>();
+		auto point_char_name = reflect::name_of<Point<char>>();
 
-		auto point_void_name = name_of<Point<void>>();
+		auto point_void_name = reflect::name_of<Point<void>>();
 
-		auto point_vec3_name = name_of<Point<Vector3>>();
-		auto point_const_vec3_name = name_of<Point<const Vector3>>();
+		auto point_vec3_name = reflect::name_of<Point<Vector3>>();
+		auto point_const_vec3_name = reflect::name_of<Point<const Vector3>>();
 
-		auto foo_i32_f32_name = name_of<Foo<i32, f32>>();
-		auto bar_i32_f32_vec3_name = name_of<Bar<i32, f32, Vector3>>();
-		auto bar_const_i32_const_f32_const_vec3_name = name_of<Bar<const i32, const f32, const Vector3>>();
-		auto bar_const_point_const_i32_const_f32_const_vec3_name = name_of<Bar<const Point<const i32>, const f32, const Vector3>>();
+		auto foo_i32_f32_name = reflect::name_of<Foo<i32, f32>>();
+		auto bar_i32_f32_vec3_name = reflect::name_of<Bar<i32, f32, Vector3>>();
+		auto bar_const_i32_const_f32_const_vec3_name = reflect::name_of<Bar<const i32, const f32, const Vector3>>();
+		auto bar_const_point_const_i32_const_f32_const_vec3_name = reflect::name_of<Bar<const Point<const i32>, const f32, const Vector3>>();
 
-		auto point_nested = name_of<const Point<const Point<const Point<const Point<Point<i32>>>>>>();
-		auto point_nested_ptr = name_of<const Point<const Point<const Point<const Point<Point<i32 *> *> *> *> *> *>();
-		auto point_nested_ptr2 = name_of<const Point<const Point<const Point<const Point<Point<i32 const *> *> *> *> *> *>();
+		auto point_nested = reflect::name_of<const Point<const Point<const Point<const Point<Point<i32>>>>>>();
+		auto point_nested_ptr = reflect::name_of<const Point<const Point<const Point<const Point<Point<i32 *> *> *> *> *> *>();
+		auto point_nested_ptr2 = reflect::name_of<const Point<const Point<const Point<const Point<Point<i32 const *> *> *> *> *> *>();
 
 		CHECK(::strcmp(point_i08_name, "Point<i8>") == 0);
 		CHECK(::strcmp(point_i16_name, "Point<i16>") == 0);

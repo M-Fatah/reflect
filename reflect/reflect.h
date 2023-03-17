@@ -166,256 +166,256 @@ namespace reflect
 		const void *data;
 		const Type *type;
 	};
-}
 
-inline static constexpr void
-_reflect_append_name(char *name, u64 &count, std::string_view type_name)
-{
-	constexpr auto string_append = [](char *string, const char *to_append, u64 &count) {
-		while(*to_append != '\0' && count < REFLECT_MAX_NAME_LENGTH - 1)
-			string[count++] = *to_append++;
-	};
-
-	constexpr auto append_type_name_prettified = [string_append](char *name, std::string_view type_name, u64 &count) {
-		if (type_name.starts_with(' '))
-			type_name.remove_prefix(1);
-
-		if (type_name.starts_with("const "))
-		{
-			string_append(name, "const ", count);
-			type_name.remove_prefix(6);
-		}
-
-		#if defined(_MSC_VER)
-			if (type_name.starts_with("enum "))
-				type_name.remove_prefix(5);
-			else if (type_name.starts_with("class "))
-				type_name.remove_prefix(6);
-			else if (type_name.starts_with("struct "))
-				type_name.remove_prefix(7);
-		#endif
-
-		if (type_name.starts_with("signed char"))
-		{
-			string_append(name, "i8", count);
-			type_name.remove_prefix(11);
-		}
-		else if (type_name.starts_with("short int"))
-		{
-			string_append(name, "i16", count);
-			type_name.remove_prefix(9);
-		}
-		else if (type_name.starts_with("short") && !type_name.starts_with("short unsigned int"))
-		{
-			string_append(name, "i16", count);
-			type_name.remove_prefix(5);
-		}
-		else if (type_name.starts_with("int"))
-		{
-			string_append(name, "i32", count);
-			type_name.remove_prefix(3);
-		}
-		else if (type_name.starts_with("__int64"))
-		{
-			string_append(name, "i64", count);
-			type_name.remove_prefix(7);
-		}
-		else if (type_name.starts_with("long int"))
-		{
-			string_append(name, "i64", count);
-			type_name.remove_prefix(8);
-		}
-		else if (type_name.starts_with("unsigned char"))
-		{
-			string_append(name, "u8", count);
-			type_name.remove_prefix(13);
-		}
-		else if (type_name.starts_with("unsigned short"))
-		{
-			string_append(name, "u16", count);
-			type_name.remove_prefix(14);
-		}
-		else if (type_name.starts_with("short unsigned int"))
-		{
-			string_append(name, "u16", count);
-			type_name.remove_prefix(18);
-		}
-		else if (type_name.starts_with("unsigned int"))
-		{
-			string_append(name, "u32", count);
-			type_name.remove_prefix(12);
-		}
-		else if (type_name.starts_with("unsigned __int64"))
-		{
-			string_append(name, "u64", count);
-			type_name.remove_prefix(16);
-		}
-		else if (type_name.starts_with("long unsigned int"))
-		{
-			string_append(name, "u64", count);
-			type_name.remove_prefix(17);
-		}
-		else if (type_name.starts_with("float"))
-		{
-			string_append(name, "f32", count);
-			type_name.remove_prefix(5);
-		}
-		else if (type_name.starts_with("double"))
-		{
-			string_append(name, "f64", count);
-			type_name.remove_prefix(6);
-		}
-
-		for (char c : type_name)
-			if (c != ' ')
-				name[count++] = c;
-	};
-
-	bool add_pointer = false;
-	if (type_name.ends_with(" const "))
+	inline static constexpr void
+	_reflect_append_name(char *name, u64 &count, std::string_view type_name)
 	{
-		string_append(name, "const ", count);
-		type_name.remove_suffix(7);
-	}
-	else if (type_name.ends_with(" const *"))
-	{
-		string_append(name, "const ", count);
-		type_name.remove_suffix(8);
-		add_pointer = true;
-	}
-	else if (type_name.ends_with('*'))
-	{
-		type_name.remove_suffix(1);
-		add_pointer = true;
-	}
+		constexpr auto string_append = [](char *string, const char *to_append, u64 &count) {
+			while(*to_append != '\0' && count < REFLECT_MAX_NAME_LENGTH - 1)
+				string[count++] = *to_append++;
+		};
 
-	if (type_name.ends_with(' '))
-		type_name.remove_suffix(1);
+		constexpr auto append_type_name_prettified = [string_append](char *name, std::string_view type_name, u64 &count) {
+			if (type_name.starts_with(' '))
+				type_name.remove_prefix(1);
 
-	if (type_name.ends_with('>'))
-	{
-		u64 open_angle_bracket_pos = type_name.find('<');
-		append_type_name_prettified(name, type_name.substr(0, open_angle_bracket_pos), count);
-		type_name.remove_prefix(open_angle_bracket_pos + 1);
-
-		name[count++] = '<';
-		u64 prev = 0;
-		u64 match = 1;
-		for (u64 c = 0; c < type_name.length(); ++c)
-		{
-			if (type_name.at(c) == '<')
+			if (type_name.starts_with("const "))
 			{
-				++match;
+				string_append(name, "const ", count);
+				type_name.remove_prefix(6);
 			}
 
-			if (type_name.at(c) == '>')
+			#if defined(_MSC_VER)
+				if (type_name.starts_with("enum "))
+					type_name.remove_prefix(5);
+				else if (type_name.starts_with("class "))
+					type_name.remove_prefix(6);
+				else if (type_name.starts_with("struct "))
+					type_name.remove_prefix(7);
+			#endif
+
+			if (type_name.starts_with("signed char"))
 			{
-				--match;
-				if (match <= 0)
+				string_append(name, "i8", count);
+				type_name.remove_prefix(11);
+			}
+			else if (type_name.starts_with("short int"))
+			{
+				string_append(name, "i16", count);
+				type_name.remove_prefix(9);
+			}
+			else if (type_name.starts_with("short") && !type_name.starts_with("short unsigned int"))
+			{
+				string_append(name, "i16", count);
+				type_name.remove_prefix(5);
+			}
+			else if (type_name.starts_with("int"))
+			{
+				string_append(name, "i32", count);
+				type_name.remove_prefix(3);
+			}
+			else if (type_name.starts_with("__int64"))
+			{
+				string_append(name, "i64", count);
+				type_name.remove_prefix(7);
+			}
+			else if (type_name.starts_with("long int"))
+			{
+				string_append(name, "i64", count);
+				type_name.remove_prefix(8);
+			}
+			else if (type_name.starts_with("unsigned char"))
+			{
+				string_append(name, "u8", count);
+				type_name.remove_prefix(13);
+			}
+			else if (type_name.starts_with("unsigned short"))
+			{
+				string_append(name, "u16", count);
+				type_name.remove_prefix(14);
+			}
+			else if (type_name.starts_with("short unsigned int"))
+			{
+				string_append(name, "u16", count);
+				type_name.remove_prefix(18);
+			}
+			else if (type_name.starts_with("unsigned int"))
+			{
+				string_append(name, "u32", count);
+				type_name.remove_prefix(12);
+			}
+			else if (type_name.starts_with("unsigned __int64"))
+			{
+				string_append(name, "u64", count);
+				type_name.remove_prefix(16);
+			}
+			else if (type_name.starts_with("long unsigned int"))
+			{
+				string_append(name, "u64", count);
+				type_name.remove_prefix(17);
+			}
+			else if (type_name.starts_with("float"))
+			{
+				string_append(name, "f32", count);
+				type_name.remove_prefix(5);
+			}
+			else if (type_name.starts_with("double"))
+			{
+				string_append(name, "f64", count);
+				type_name.remove_prefix(6);
+			}
+
+			for (char c : type_name)
+				if (c != ' ')
+					name[count++] = c;
+		};
+
+		bool add_pointer = false;
+		if (type_name.ends_with(" const "))
+		{
+			string_append(name, "const ", count);
+			type_name.remove_suffix(7);
+		}
+		else if (type_name.ends_with(" const *"))
+		{
+			string_append(name, "const ", count);
+			type_name.remove_suffix(8);
+			add_pointer = true;
+		}
+		else if (type_name.ends_with('*'))
+		{
+			type_name.remove_suffix(1);
+			add_pointer = true;
+		}
+
+		if (type_name.ends_with(' '))
+			type_name.remove_suffix(1);
+
+		if (type_name.ends_with('>'))
+		{
+			u64 open_angle_bracket_pos = type_name.find('<');
+			append_type_name_prettified(name, type_name.substr(0, open_angle_bracket_pos), count);
+			type_name.remove_prefix(open_angle_bracket_pos + 1);
+
+			name[count++] = '<';
+			u64 prev = 0;
+			u64 match = 1;
+			for (u64 c = 0; c < type_name.length(); ++c)
+			{
+				if (type_name.at(c) == '<')
+				{
+					++match;
+				}
+
+				if (type_name.at(c) == '>')
+				{
+					--match;
+					if (match <= 0)
+					{
+						_reflect_append_name(name, count, type_name.substr(prev, c - prev));
+						name[count++] = '>';
+						prev = c + 1;
+					}
+				}
+
+				if (type_name.at(c) == ',')
 				{
 					_reflect_append_name(name, count, type_name.substr(prev, c - prev));
-					name[count++] = '>';
+					name[count++] = ',';
 					prev = c + 1;
 				}
 			}
+		}
+		else
+		{
+			append_type_name_prettified(name, type_name, count);
+		}
 
-			if (type_name.at(c) == ',')
-			{
-				_reflect_append_name(name, count, type_name.substr(prev, c - prev));
-				name[count++] = ',';
-				prev = c + 1;
-			}
+		if (add_pointer)
+			name[count++] = '*';
+	}
+
+	template <typename T>
+	inline static constexpr const char *
+	name_of()
+	{
+			if constexpr (std::is_same_v<T, i8>)   return "i8";
+		else if constexpr (std::is_same_v<T, i16>)  return "i16";
+		else if constexpr (std::is_same_v<T, i32>)  return "i32";
+		else if constexpr (std::is_same_v<T, i64>)  return "i64";
+		else if constexpr (std::is_same_v<T, u8>)   return "u8";
+		else if constexpr (std::is_same_v<T, u16>)  return "u16";
+		else if constexpr (std::is_same_v<T, u32>)  return "u32";
+		else if constexpr (std::is_same_v<T, u64>)  return "u64";
+		else if constexpr (std::is_same_v<T, f32>)  return "f32";
+		else if constexpr (std::is_same_v<T, f64>)  return "f64";
+		else if constexpr (std::is_same_v<T, bool>) return "bool";
+		else if constexpr (std::is_same_v<T, char>) return "char";
+		else if constexpr (std::is_same_v<T, void>) return "void";
+		else
+		{
+			constexpr auto get_type_name = [](std::string_view type_name) -> const char * {
+				static char name[REFLECT_MAX_NAME_LENGTH] = {};
+				u64 count = 0;
+				_reflect_append_name(name, count, type_name);
+				return name;
+			};
+
+			#if defined(_MSC_VER)
+				constexpr auto type_function_name      = std::string_view{__FUNCSIG__};
+				constexpr auto type_name_prefix_length = type_function_name.find("name_of<") + 8;
+				constexpr auto type_name_length        = type_function_name.rfind(">") - type_name_prefix_length;
+			#elif defined(__GNUC__)
+				constexpr auto type_function_name      = std::string_view{__PRETTY_FUNCTION__};
+				constexpr auto type_name_prefix_length = type_function_name.find("= ") + 2;
+				constexpr auto type_name_length        = type_function_name.rfind("]") - type_name_prefix_length;
+			#else
+				#error "[REFLECT]: Unsupported compiler."
+			#endif
+			static const char *name = get_type_name({type_function_name.data() + type_name_prefix_length, type_name_length});
+			return name;
 		}
 	}
-	else
+
+	template <typename T>
+	inline static constexpr TYPE_KIND
+	kind_of()
 	{
-		append_type_name_prettified(name, type_name, count);
+		if constexpr (std::is_same_v<T, i8>)
+			return TYPE_KIND_I8;
+		else if constexpr (std::is_same_v<T, i16>)
+			return TYPE_KIND_I16;
+		else if constexpr (std::is_same_v<T, i32>)
+			return TYPE_KIND_I32;
+		else if constexpr (std::is_same_v<T, i64>)
+			return TYPE_KIND_I64;
+		else if constexpr (std::is_same_v<T, u8>)
+			return TYPE_KIND_U8;
+		else if constexpr (std::is_same_v<T, u16>)
+			return TYPE_KIND_U16;
+		else if constexpr (std::is_same_v<T, u32>)
+			return TYPE_KIND_U32;
+		else if constexpr (std::is_same_v<T, u64>)
+			return TYPE_KIND_U64;
+		else if constexpr (std::is_same_v<T, f32>)
+			return TYPE_KIND_F32;
+		else if constexpr (std::is_same_v<T, f64>)
+			return TYPE_KIND_F64;
+		else if constexpr (std::is_same_v<T, bool>)
+			return TYPE_KIND_BOOL;
+		else if constexpr (std::is_same_v<T, char>)
+			return TYPE_KIND_CHAR;
+		else if constexpr (std::is_same_v<T, void>)
+			return TYPE_KIND_VOID;
+		else if constexpr (std::is_pointer_v<T>)
+			return TYPE_KIND_POINTER;
+		else if constexpr (std::is_array_v<T>)
+			return TYPE_KIND_ARRAY;
+		else if constexpr (std::is_enum_v<T>)
+			return TYPE_KIND_ENUM;
+		else if constexpr (std::is_compound_v<T>)
+			return TYPE_KIND_STRUCT;
 	}
-
-	if (add_pointer)
-		name[count++] = '*';
-}
-
-template <typename T>
-inline static constexpr const char *
-name_of()
-{
-		 if constexpr (std::is_same_v<T, i8>)   return "i8";
-	else if constexpr (std::is_same_v<T, i16>)  return "i16";
-	else if constexpr (std::is_same_v<T, i32>)  return "i32";
-	else if constexpr (std::is_same_v<T, i64>)  return "i64";
-	else if constexpr (std::is_same_v<T, u8>)   return "u8";
-	else if constexpr (std::is_same_v<T, u16>)  return "u16";
-	else if constexpr (std::is_same_v<T, u32>)  return "u32";
-	else if constexpr (std::is_same_v<T, u64>)  return "u64";
-	else if constexpr (std::is_same_v<T, f32>)  return "f32";
-	else if constexpr (std::is_same_v<T, f64>)  return "f64";
-	else if constexpr (std::is_same_v<T, bool>) return "bool";
-	else if constexpr (std::is_same_v<T, char>) return "char";
-	else if constexpr (std::is_same_v<T, void>) return "void";
-	else
-	{
-		constexpr auto get_type_name = [](std::string_view type_name) -> const char * {
-			static char name[REFLECT_MAX_NAME_LENGTH] = {};
-			u64 count = 0;
-			_reflect_append_name(name, count, type_name);
-			return name;
-		};
-
-		#if defined(_MSC_VER)
-			constexpr auto type_function_name      = std::string_view{__FUNCSIG__};
-			constexpr auto type_name_prefix_length = type_function_name.find("name_of<") + 8;
-			constexpr auto type_name_length        = type_function_name.rfind(">") - type_name_prefix_length;
-		#elif defined(__GNUC__)
-			constexpr auto type_function_name      = std::string_view{__PRETTY_FUNCTION__};
-			constexpr auto type_name_prefix_length = type_function_name.find("= ") + 2;
-			constexpr auto type_name_length        = type_function_name.rfind("]") - type_name_prefix_length;
-		#else
-			#error "[REFLECT]: Unsupported compiler."
-		#endif
-		static const char *name = get_type_name({type_function_name.data() + type_name_prefix_length, type_name_length});
-		return name;
-	}
-}
-
-template <typename T>
-inline static constexpr reflect::TYPE_KIND
-kind_of()
-{
-	if constexpr (std::is_same_v<T, i8>)
-		return reflect::TYPE_KIND_I8;
-	else if constexpr (std::is_same_v<T, i16>)
-		return reflect::TYPE_KIND_I16;
-	else if constexpr (std::is_same_v<T, i32>)
-		return reflect::TYPE_KIND_I32;
-	else if constexpr (std::is_same_v<T, i64>)
-		return reflect::TYPE_KIND_I64;
-	else if constexpr (std::is_same_v<T, u8>)
-		return reflect::TYPE_KIND_U8;
-	else if constexpr (std::is_same_v<T, u16>)
-		return reflect::TYPE_KIND_U16;
-	else if constexpr (std::is_same_v<T, u32>)
-		return reflect::TYPE_KIND_U32;
-	else if constexpr (std::is_same_v<T, u64>)
-		return reflect::TYPE_KIND_U64;
-	else if constexpr (std::is_same_v<T, f32>)
-		return reflect::TYPE_KIND_F32;
-	else if constexpr (std::is_same_v<T, f64>)
-		return reflect::TYPE_KIND_F64;
-	else if constexpr (std::is_same_v<T, bool>)
-		return reflect::TYPE_KIND_BOOL;
-	else if constexpr (std::is_same_v<T, char>)
-		return reflect::TYPE_KIND_CHAR;
-	else if constexpr (std::is_same_v<T, void>)
-		return reflect::TYPE_KIND_VOID;
-	else if constexpr (std::is_pointer_v<T>)
-		return reflect::TYPE_KIND_POINTER;
-	else if constexpr (std::is_array_v<T>)
-		return reflect::TYPE_KIND_ARRAY;
-	else if constexpr (std::is_enum_v<T>)
-		return reflect::TYPE_KIND_ENUM;
-	else if constexpr (std::is_compound_v<T>)
-		return reflect::TYPE_KIND_STRUCT;
 }
 
 template <typename T>
@@ -456,8 +456,8 @@ inline static const reflect::Type *                                             
 type_of(const _TYPE_OF_NAME(T))                                                     \
 {                                                                                   \
 	static const reflect::Type self = {                                                      \
-		.name = name_of<_TYPE_OF_NAME(T)>(),                                        \
-		.kind = kind_of<_TYPE_OF_NAME(T)>(),                                        \
+		.name = reflect::name_of<_TYPE_OF_NAME(T)>(),                                        \
+		.kind = reflect::kind_of<_TYPE_OF_NAME(T)>(),                                        \
 		.size = sizeof(_TYPE_OF_NAME(T)),                                           \
 		.align = alignof(_TYPE_OF_NAME(T)),                                         \
 		.as_struct = {}                                                             \
@@ -493,8 +493,8 @@ inline const reflect::Type *
 type_of<void>()
 {
 	static const reflect::Type self = {
-		.name = name_of<void>(),
-		.kind = kind_of<void>(),
+		.name = reflect::name_of<void>(),
+		.kind = reflect::kind_of<void>(),
 		.size = 0,
 		.align = 0,
 		.as_struct = {}
@@ -507,8 +507,8 @@ inline const reflect::Type *
 type_of<const void>()
 {
 	static const reflect::Type self = {
-		.name = name_of<void>(),
-		.kind = kind_of<void>(),
+		.name = reflect::name_of<void>(),
+		.kind = reflect::kind_of<void>(),
 		.size = 0,
 		.align = 0,
 		.as_struct = {}
@@ -525,8 +525,8 @@ type_of(const T)
 	if constexpr (!std::is_abstract_v<std::remove_pointer_t<T>>)
 		pointee = type_of<std::remove_pointer_t<T>>();
 	static const reflect::Type self = {
-		.name = name_of<T>(),
-		.kind = kind_of<T>(),
+		.name = reflect::name_of<T>(),
+		.kind = reflect::kind_of<T>(),
 		.size = sizeof(T),
 		.align = alignof(T),
 		.as_pointer = pointee
@@ -539,8 +539,8 @@ inline static constexpr const reflect::Type *
 type_of(const T(&)[N])
 {
 	static const reflect::Type self = {
-		.name = name_of<T[N]>(),
-		.kind = kind_of<T[N]>(),
+		.name = reflect::name_of<T[N]>(),
+		.kind = reflect::kind_of<T[N]>(),
 		.size = sizeof(T[N]),
 		.align = alignof(T[N]),
 		.as_array = {type_of(T{}), N}
@@ -571,8 +571,8 @@ type_of(const T)                                                                
 {                                                                                                      \
 	__VA_OPT__(static const reflect::Type_Enum_Value values[] = { OVERLOAD(TYPE_OF_ENUM_VALUE, __VA_ARGS__) };) \
 	static const reflect::Type self = {                                                                         \
-		.name = name_of<T>(),                                                                          \
-		.kind = kind_of<T>(),                                                                          \
+		.name = reflect::name_of<T>(),                                                                          \
+		.kind = reflect::kind_of<T>(),                                                                          \
 		.size = sizeof(T),                                                                             \
 		.align = alignof(T),                                                                           \
 		.as_enum = {__VA_OPT__(values, sizeof(values) / sizeof(reflect::Type_Enum_Value))}                      \
@@ -643,8 +643,8 @@ type_of(const T)
 	}
 
 	static const reflect::Type self = {
-		.name = name_of<T>(),
-		.kind = kind_of<T>(),
+		.name = reflect::name_of<T>(),
+		.kind = reflect::kind_of<T>(),
 		.size = sizeof(T),
 		.align = alignof(T),
 		.as_enum = {values, data.count}
