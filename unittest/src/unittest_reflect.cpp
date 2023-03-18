@@ -239,6 +239,7 @@ TEST_CASE("[CORE]: Reflect")
 		auto point_nested = name_of<const Point<const Point<const Point<const Point<Point<i32>>>>>>();
 		auto point_nested_ptr = name_of<const Point<const Point<const Point<const Point<Point<i32 *> *> *> *> *> *>();
 		auto point_nested_ptr2 = name_of<const Point<const Point<const Point<const Point<Point<i32 const *> *> *> *> *> *>();
+		auto point_nested_const_ptr_const = name_of<const Point<const Point<i32> * const>>();
 
 		CHECK(::strcmp(point_i08_name, "Point<i8>") == 0);
 		CHECK(::strcmp(point_i16_name, "Point<i16>") == 0);
@@ -268,6 +269,7 @@ TEST_CASE("[CORE]: Reflect")
 		CHECK(::strcmp(point_nested, "const Point<const Point<const Point<const Point<Point<i32>>>>>") == 0);
 		CHECK(::strcmp(point_nested_ptr, "const Point<const Point<const Point<const Point<Point<i32*>*>*>*>*>*") == 0);
 		CHECK(::strcmp(point_nested_ptr2, "const Point<const Point<const Point<const Point<Point<const i32*>*>*>*>*>*") == 0);
+		CHECK(::strcmp(point_nested_const_ptr_const, "const Point<const Point<i32>* const>") == 0);
 	}
 
 	SUBCASE("type_of<T> primitives")

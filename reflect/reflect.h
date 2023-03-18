@@ -78,12 +78,11 @@ typedef uintptr_t uptr;
 			- [ ] Simplify type_of(Enum).
 			- [ ] Add enum range?
 		- [ ] Functions?
-	- [ ] name_of<T>().
+	- [x] name_of<T>().
 		- [x] Names with const specifier.
 		- [x] Pointer names.
 		- [ ] Use local stack arrays and try to compute names compile times and store final names,
 				in a static std::array<char> in a specialized template struct.
-		- [ ] Test names with const T *ptr const.
 		- [ ] Simplify.
 	- [ ] Make it compatible with C++17?
 	- [ ] Cleanup.
@@ -269,6 +268,14 @@ _reflect_append_name(char *name, u64 &count, std::string_view type_name)
 	};
 
 	bool add_pointer = false;
+	bool add_const   = false;
+	if (type_name.ends_with("* const"))
+	{
+		type_name.remove_suffix(7);
+		add_pointer = true;
+		add_const = true;
+	}
+
 	if (type_name.ends_with(" const "))
 	{
 		string_append(name, "const ", count);
@@ -331,6 +338,8 @@ _reflect_append_name(char *name, u64 &count, std::string_view type_name)
 
 	if (add_pointer)
 		name[count++] = '*';
+	if (add_const)
+		string_append(name, " const", count);
 }
 
 template <typename T>
